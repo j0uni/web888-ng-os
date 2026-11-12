@@ -16,9 +16,9 @@ RAUC_BUNDLE_SLOTS = "rootfs"
 RAUC_SLOT_rootfs = "web888-image"
 RAUC_SLOT_rootfs[fstype] = "ext4"
 
-# Signed with the release key (kas/bundle.yml: WEB888_RAUC_KEY, a path;
-# in CI a secret); its certificate, issued by the CA in the image's
-# keyring (recipes-core/rauc), is here.
+# Signed with the owner's encrypted key, supplied externally using
+# WEB888_RAUC_KEY. This fork uses the same self-signed public certificate
+# here and in the device keyring. Never commit the private key.
 RAUC_KEY_FILE = "${WEB888_RAUC_KEY}"
 RAUC_CERT_FILE = "${THISDIR}/files/release-1.cert.pem"
 

@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+# Explicit manual update; RAUC verifies the owner's signature before installation.
+name=${1:-latest.raucb}
+case "$name" in
+  *[!A-Za-z0-9._-]*|''|.*) echo "Expected a bundle filename" >&2; exit 2 ;;
+esac
+case "$name" in *.raucb) ;; *) echo "Expected a .raucb bundle" >&2; exit 2 ;; esac
+exec rauc install "https://jouni.kapsi.fi/web888fw/$name"

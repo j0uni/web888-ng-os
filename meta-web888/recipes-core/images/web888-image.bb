@@ -19,7 +19,7 @@ IMAGE_INSTALL += "frp cloudflared rathole chisel"
 # and grows its file system to the slot (resize2fs; system.conf resize).
 # web888-boot-ok marks a slot good, after web888d has run, instead of
 # RAUC's own mark-good at boot.
-IMAGE_INSTALL += "rauc e2fsprogs-resize2fs"
+IMAGE_INSTALL += "rauc e2fsprogs-resize2fs web888-owner-update"
 BAD_RECOMMENDATIONS += "rauc-mark-good"
 
 IMAGE_LINGUAS = ""

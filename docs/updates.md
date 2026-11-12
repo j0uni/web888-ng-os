@@ -14,12 +14,19 @@ one).
 Units on v0.1.0 or v0.2.0 have no RAUC: write the v0.3.0 card image
 once, and update over the network from then on.
 
+## Owner firmware branch
+
+This branch trusts only the owner certificate and installs updates from
+https://jouni.kapsi.fi/web888fw/ . See [owner-firmware.md](owner-firmware.md)
+for local signing, publication requirements, migration and recovery.
+The original project's bundles are not trusted directly.
+
 ## Updating
 
 Over SSH (an `ssh_key` in `web888.txt`):
 
 ```sh
-rauc install https://github.com/jeskko/web888-ng-os/releases/download/v0.3.0/web888-ng-v0.3.0.raucb
+web888-owner-update
 reboot
 ```
 
@@ -51,18 +58,22 @@ boots it, and the install can simply be run again.
 
 ## Signing
 
-Bundles are signed in CI with the release key (a repository secret). Its
-certificate is issued by the project's update CA, whose certificate is
-the unit's keyring (`/usr/lib/rauc/web888-ca.cert.pem`). Only
-certificates made for code signing are accepted (`check-purpose =
-codesign`). The certificate is checked at the bundle's signing time, so
-a unit whose clock isn't set yet can still install.
+This branch uses the owner's self-signed code-signing certificate as the
+only trust anchor (`/usr/lib/rauc/web888-ca.cert.pem`); the same public
+certificate is supplied by the bundle recipe. The private key is provided
+externally, never committed or placed on the card. The device enforces
+`check-purpose = codesign` and retains the existing signing-time handling.
 
-To run your own builds on a unit, build the image with your own CA in
-`meta-web888/recipes-core/rauc/files/` and sign with your own key
-(`WEB888_RAUC_KEY=<key> kas build kas/web888.yml:kas/bundle.yml`, with
-your certificate in `recipes-core/bundles/files/`). A unit accepts
-bundles only from the CA its running image has.
+For encrypted-key local signing, use `tools/owner-fw/sign-bundle.command`.
+The helper explicitly configures the host's code-signing verification policy,
+checks that the rootfs retains the owner's certificate, and produces a signed
+verity bundle. Keep that trust anchor in every future rootfs. A simple re-sign
+of an upstream rootfs would remove it on the next boot.
+
+A full Yocto image/bundle rebuild was not run during this local personalization.
+Encrypted-key passphrase handling for unattended BitBake/CI signing has not been
+configured; do not assume an encrypted key file alone is sufficient for that
+pipeline. Local interactive signing is the verified path.
 
 ## Tested
 

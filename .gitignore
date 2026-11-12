@@ -1,2 +1,12 @@
 build/
 .home/
+*.key.pem
+web888-signing-private/
+web888-config-backup-*/
+__pycache__/
+tools/owner-fw/prepared/
+tools/owner-fw/publish/
+tools/owner-fw/.prepare-*/
+tools/owner-fw/.flash-*/
+tools/owner-fw/flash.log
+tools/owner-fw/flash-result.json

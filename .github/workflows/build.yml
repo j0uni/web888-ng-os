@@ -17,6 +17,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  owner-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tools/owner-fw -p 'test_flash.py' -v
+      - run: python3 -m unittest discover -s tools/owner-fw -p 'test_source_config.py' -v
+      - run: docker build -t web888-owner-tools:ci tools/owner-fw
+      - run: >-
+          docker run --rm --network none
+          -v "$PWD/tools/owner-fw:/kit:ro" web888-owner-tools:ci
+          python3 -m unittest discover -s /kit -p 'test_signatures.py' -v
+
   # Cheap check on GitHub-hosted runners, also for pull requests.
   config:
     runs-on: ubuntu-latest
@@ -33,7 +45,7 @@ jobs:
   # until the repository variable SELF_HOSTED_RUNNER is "true".
   image:
     if: github.event_name != 'pull_request' && vars.SELF_HOSTED_RUNNER == 'true'
-    needs: config
+    needs: [config, owner-tools]
     runs-on: [self-hosted, linux, yocto]
     timeout-minutes: 600
     env:

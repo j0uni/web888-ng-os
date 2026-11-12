@@ -1,5 +1,11 @@
 # web888-ng-os: firmware image for the Web-888 SDR
 
+**Owner firmware branch:** trusts only Jouni's signing certificate and uses
+https://jouni.kapsi.fi/web888fw/ for manual signed updates. See
+[owner firmware and recovery](docs/owner-firmware.md) and
+[local preparation/signing tools](tools/owner-fw/README.md). The private key is
+not in this repository. Unmodified upstream update bundles are not trusted.
+
 Yocto 6.0 "Wrynose" image for the Web-888 HF receiver (Zynq-7010): the
 `meta-web888` layer and a [kas](https://kas.readthedocs.io) configuration.
 Part of web888-ng, together with
