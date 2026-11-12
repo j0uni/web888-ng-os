@@ -51,9 +51,9 @@ Completed signed bundles and `latest.raucb` go into `publish/`, alongside `SHA25
 
 ## Hosting and installing future updates
 
-No hosting server has been inspected or changed. To publish later, upload only public contents of `publish/` into the approved web directory serving https://jouni.kapsi.fi/web888fw/ . Upload the versioned bundle first and replace `latest.raucb` only after the complete upload is verified, preferably with a same-filesystem atomic rename. The host must support HTTP byte-range requests for RAUC streaming; this still needs verification under a separately approved server-access plan. Signatures are authoritative; SHA256SUMS and latest.json are informational integrity/version aids.
+The initial owner-signed release **v0.8.0-owner1** was published on 2026-11-12 at https://jouni.kapsi.fi/web888fw/ . The immutable bundle is `web888-v0.8.0-owner1.raucb`; `latest.raucb` currently serves the same bytes (90,036,330 bytes; SHA-256 `21a048fdf0cf6d8aec9bfdfdd9998c3d534dd239a88720f5b14322f23feaa8b9`). Public `latest.json`, `SHA256SUMS` and `owner.cert.pem` are available there too. For later releases, upload only public contents of `publish/` into that approved web directory. Upload the versioned bundle first and replace `latest.raucb` only after the complete upload is verified, preferably with a same-filesystem atomic rename. The host supports HTTP byte-range requests: a public request for bytes 0-4095 returned HTTP 206 and the correct `Content-Range`/payload during this deployment. The full public HTTPS download also matched the signed local bundle checksum. Signatures are authoritative; SHA256SUMS and latest.json are informational integrity/version aids.
 
-After a signed bundle is actually hosted, the receiver's manual command is:
+The receiver's manual update command is:
 
 ```sh
 web888-owner-update
