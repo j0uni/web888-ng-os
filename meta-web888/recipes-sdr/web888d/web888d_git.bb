@@ -11,9 +11,9 @@ SRC_URI = "git://github.com/jeskko/web888-ng.git;protocol=https;branch=main \
            file://web888d-safe.service \
            file://web888d.default \
            "
-# v0.12.1 (v0.12.0 + safe mode)
-SRCREV = "113dab8f617b1ee094cecc37e98451c1a228e443"
-PV = "0.12.1"
+# v0.13.0 (logs, settings backup, the boot loader, auto = the channelizer)
+SRCREV = "9a28237e07ace10ab8d7bcf9e993bfb14c7faab4"
+PV = "0.13.0"
 
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 

@@ -9,7 +9,8 @@ QEMU virtual Web-888) and [web888-ng](https://github.com/jeskko/web888-ng)
 
 Status: **released for testers** (pre-releases on the Releases page).
 v0.2.0's SD card image has booted on a Web-888 from the card (a tester's
-unit, 2026-10-30), with the right RF frequencies; most testing is still
+unit, 2026-10-30), with the right RF frequencies, and the same unit has
+run web888d v0.11.0 with the channelizer from its card (2026-11-14); most testing is still
 in the emulator of web888-ng-hw. Releases so far: v0.1.0 (the first SD
 card image), v0.2.0 (a second image with the channelizer bitstream),
 v0.3.0 (updates over the network, tunnels, web888d v0.6.0), v0.4.0 (one
@@ -22,8 +23,10 @@ v0.8.0 (web888d v0.11.0: FT8, FT4 and WSPR decoded in the browser,
 skimmers on less CPU), v0.9.0 (web888d v0.12.0: live DX spots, a map
 of the stations heard, OS updates from the admin page, metrics) and
 v0.9.1 (security: kernel 6.18.63, newer packages, unused ones removed),
-v0.9.2 (no unassessed CVEs of CVSS 7.0 or more) and v0.9.3 (safe mode:
-a unit that keeps failing to start stays reachable; web888d v0.12.1).
+v0.9.2 (no unassessed CVEs of CVSS 7.0 or more), v0.9.3 (safe mode:
+a unit that keeps failing to start stays reachable; web888d v0.12.1) and
+v0.10.0 (logs and a settings backup on the admin page, the card's boot
+loader updated when the owner asks, the owner's guide; web888d v0.13.0).
 
 What the image is:
 
