@@ -54,8 +54,12 @@ What the image is:
 * **Updates (from v0.3.0):** signed RAUC bundles, installed over the
   network into the other slot with `rauc install <URL>`, or from
   web888d's admin page (**Update**, from v0.9.0). The unit falls back to
-  the old slot if the new one doesn't come up: `docs/updates.md`.
-* **For testers:** `docs/testing-the-sd-image.md`.
+  the old slot if the new one doesn't come up: `docs/updates.md`. The
+  card's boot loader (no A/B) only when the owner asks (from v0.10.0,
+  `web888-bootloader`).
+* **For owners:** `docs/owner-guide.md` (install, settings, updates,
+  backups, what the unit connects to, recovery); **for testers:**
+  `docs/testing-the-sd-image.md`.
 
 Chain-loading from the stock firmware (no card change):
 `web888-chainboot-initramfs` with web888-ng-hw's `tools/chainboot`. The

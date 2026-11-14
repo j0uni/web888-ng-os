@@ -1,0 +1,166 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+# web888-bootloader: the boot loader on the card's FAT (BOOT.BIN, the U-Boot
+# SPL, and u-boot.img) from the one this root slot ships
+# (/usr/share/web888/boot, docs/updates.md "The boot loader").
+#   web888-bootloader            status (key=value lines)
+#   web888-bootloader install    write the slot's boot loader to the FAT
+#   web888-bootloader install --force    also when it is the same
+#
+# Root slots are A/B with a fallback; the FAT's boot loader is not: the
+# Zynq's boot ROM reads one BOOT.BIN from the card and has nothing to fall
+# back to. A boot loader that doesn't start (a power cut while the files
+# are written, a bad build) needs the card re-imaged on a computer. So it
+# is written only when asked, only from a system that has booted well, and
+# the old files stay next to it (boot.bin.old, u-boot.img.old: renamed back
+# on a computer, they boot as before).
+#
+# Tests: WEB888_BOOT (the FAT, written without remounting), WEB888_SHIP
+# (the slot's files), WEB888_CMDLINE, WEB888_RUN, WEB888_FW_PRINTENV.
+set -u
+
+BOOT=${WEB888_BOOT:-/boot}
+SHIP=${WEB888_SHIP:-/usr/share/web888/boot}
+CMDLINE=${WEB888_CMDLINE:-/proc/cmdline}
+RUN=${WEB888_RUN:-/run}
+FW_PRINTENV=${WEB888_FW_PRINTENV:-fw_printenv}
+FILES="boot.bin u-boot.img"
+# FAT room for the new files and the old ones kept (KiB)
+ROOM_KIB=4096
+
+say() { echo "web888-bootloader: $*"; }
+fail() {
+	echo "web888-bootloader: $*" >&2
+	exit 1
+}
+
+sum() { sha256sum "$1" 2>/dev/null | cut -d' ' -f1; }
+
+slot() { sed -n 's/.*rauc\.slot=\([AB]\).*/\1/p' "$CMDLINE"; }
+
+# why the boot loader can't be written now, if it can't
+blocked() {
+	u=$(unsupported)
+	[ -z "$u" ] || { echo "$u"; return; }
+	s=$(slot)
+	if [ -e "$RUN/web888/safe" ]; then
+		echo "in safe mode: leave it first (web888-safe leave)"
+		return
+	fi
+	left=$($FW_PRINTENV -n "BOOT_${s}_LEFT" 2>/dev/null)
+	if [ "$left" != 3 ]; then
+		echo "this system (slot $s) is not marked good yet (tries ${left:-?}); wait a minute after it starts"
+		return
+	fi
+	# the slot's copy, as built (the root has no checksums of its own)
+	(cd "$SHIP" && sha256sum -c SHA256SUMS > /dev/null 2>&1) ||
+		{ echo "the slot's boot loader files don't match their checksums"; return; }
+}
+
+# whether the card can take this system's boot loader at all (our own
+# boot, the files there), apart from when
+unsupported() {
+	[ -n "$(slot)" ] || { echo "not started by this image's own boot loader (chain-loaded from the stock firmware?)"; return; }
+	for f in $FILES; do
+		[ -f "$BOOT/$f" ] || { echo "no $f on the card's FAT ($BOOT)"; return; }
+		[ -f "$SHIP/$f" ] || { echo "this system ships no $f ($SHIP)"; return; }
+	done
+}
+
+# state: current (the card has this system's boot loader), update (it
+# has another) or unsupported (reason); blocked: why install can't run
+# now, if it can't
+status() {
+	why=$(unsupported)
+	if [ -n "$why" ]; then
+		echo "state=unsupported"
+		echo "reason=$why"
+		return 0
+	fi
+	same=yes
+	for f in $FILES; do
+		[ "$(sum "$BOOT/$f")" = "$(sum "$SHIP/$f")" ] || same=no
+	done
+	[ "$same" = yes ] && echo "state=current" || echo "state=update"
+	b=$(blocked)
+	[ -n "$b" ] && echo "blocked=$b"
+	echo "slot=$(slot)"
+	echo "installed_spl=$(sum "$BOOT/boot.bin")"
+	echo "installed_uboot=$(sum "$BOOT/u-boot.img")"
+	echo "shipped_spl=$(sum "$SHIP/boot.bin")"
+	echo "shipped_uboot=$(sum "$SHIP/u-boot.img")"
+	[ -f "$SHIP/VERSION" ] && echo "shipped_version=$(cat "$SHIP/VERSION")"
+	[ -f "$BOOT/boot.bin.old" ] && echo "old_kept=yes"
+	return 0
+}
+
+boot_is_rw() { grep -q "^[^ ]* $BOOT vfat rw[, ]" /proc/mounts; }
+boot_rw() {
+	[ -n "${WEB888_BOOT:-}" ] && return 0
+	boot_is_rw || mount -o remount,rw "$BOOT"
+}
+boot_ro() {
+	sync
+	[ -n "${WEB888_BOOT:-}" ] && return 0
+	boot_is_rw && mount -o remount,ro "$BOOT"
+	return 0
+}
+# the card's copy, not the page cache's
+uncached() {
+	sync
+	[ -n "${WEB888_BOOT:-}" ] || echo 3 > /proc/sys/vm/drop_caches
+}
+
+install() {
+	why=$(blocked)
+	[ -z "$why" ] || fail "not written: $why"
+	if [ "${1:-}" != --force ]; then
+		same=yes
+		for f in $FILES; do
+			[ "$(sum "$BOOT/$f")" = "$(sum "$SHIP/$f")" ] || same=no
+		done
+		[ "$same" = no ] || { say "the card's boot loader is already this system's"; return 0; }
+	fi
+	free=$(df -k "$BOOT" | awk 'NR == 2 { print $4 }')
+	[ "${free:-0}" -ge "$ROOM_KIB" ] || fail "not written: ${free:-?} KiB free on the FAT, $ROOM_KIB needed"
+	boot_rw || fail "not written: the FAT can't be written (the card is read-only?)"
+	trap boot_ro EXIT
+	# 1. the new files next to the old ones, checked as read back
+	for f in $FILES; do
+		cp "$SHIP/$f" "$BOOT/$f.new" || fail "not written: $f.new: copy failed"
+	done
+	uncached
+	for f in $FILES; do
+		[ "$(sum "$BOOT/$f.new")" = "$(sum "$SHIP/$f")" ] ||
+			{ rm -f "$BOOT/$f.new"; fail "not written: $f.new reads back wrong (the card?)"; }
+	done
+	# 2. the old ones kept (the ones that booted this system); not when
+	# they are the same as the new (--force): an older .old stays
+	for f in $FILES; do
+		[ "$(sum "$BOOT/$f")" = "$(sum "$SHIP/$f")" ] && continue
+		cp "$BOOT/$f" "$BOOT/$f.old.new" && mv -f "$BOOT/$f.old.new" "$BOOT/$f.old" ||
+			fail "not written: can't keep $f.old (the new files are there as .new)"
+	done
+	sync
+	# 3. in place: U-Boot first, then the SPL that loads it (either old
+	# SPL with the new U-Boot or the reverse boots: same layout)
+	say "writing the boot loader: don't power off"
+	mv -f "$BOOT/u-boot.img.new" "$BOOT/u-boot.img" && sync &&
+		mv -f "$BOOT/boot.bin.new" "$BOOT/boot.bin" && sync ||
+		fail "the rename failed: put boot.bin.old and u-boot.img.old back as boot.bin and u-boot.img on a computer before a reboot"
+	uncached
+	for f in $FILES; do
+		[ "$(sum "$BOOT/$f")" = "$(sum "$SHIP/$f")" ] ||
+			fail "$f reads back wrong: put $f.old back as $f on a computer before a reboot"
+	done
+	say "done: the next boot starts with this system's boot loader (the old one is kept as boot.bin.old and u-boot.img.old)"
+}
+
+case ${1:-status} in
+status) status ;;
+install) shift; install "$@" ;;
+*)
+	sed -n '5,8p' "$0" >&2
+	exit 2
+	;;
+esac

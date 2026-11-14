@@ -10,7 +10,7 @@ IMAGE_FEATURES += "read-only-rootfs ssh-server-dropbear"
 # e2fsck: the configuration partition is checked at boot (fstab pass 2).
 # The kernel and the device tree in /boot: U-Boot loads them from the
 # root slot it chose. web888-setup: web888.txt, the slot marked good.
-IMAGE_INSTALL += "web888-sdr web888d e2fsprogs-e2fsck web888-setup \
+IMAGE_INSTALL += "web888-sdr web888d e2fsprogs-e2fsck web888-setup web888-bootloader \
                   kernel-image kernel-devicetree"
 # The tunnels' clients (frp, Cloudflare Tunnel, rathole, chisel): each
 # runs only when web888.txt sets it up (web888-setup, docs/tunnels.md).

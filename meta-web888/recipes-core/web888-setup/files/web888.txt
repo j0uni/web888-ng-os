@@ -29,7 +29,9 @@
 # The FPGA bitstream: channelizer (the default: the whole band in bins,
 # 32 receivers, zoomed waterfalls from the FPGA) or standard (12
 # receivers; the bitstream before v0.7.0, the one with the most hours on
-# boards: use it if the channelizer gives you trouble).
+# boards: use it if the channelizer gives you trouble). Without this line
+# the admin page's setting (Configuration, radio) decides; with it, this
+# line does.
 #bitstream = channelizer
 
 # The antenna input: hf (0-61 MHz; the default) or vhf (EXPERIMENTAL: the

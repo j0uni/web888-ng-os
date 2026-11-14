@@ -4,12 +4,12 @@ From v0.3.0 on, a unit running the SD card image can update itself
 without taking the card out. Each release has an update bundle,
 `web888-ng-<version>.raucb`, next to the card images. The bundle holds
 the whole system: kernel, device tree, bitstreams, web888d and the rest.
-Every bitstream is in the system, and `bitstream =` in `web888.txt`
-chooses one, so an update keeps the unit's choice (v0.2.0 and v0.3.0's
-`-channelizer` image only had that line set). A unit without the line
-gets the release's default: the standard bitstream up to v0.6.0, the
-channelizer from v0.7.0 (`bitstream = standard` keeps the standard
-one).
+Every bitstream is in the system, and the unit's choice carries over:
+`bitstream =` in `web888.txt` if it has the line, else (from v0.10.0)
+the admin page's setting (Configuration, `radio.bitstream`; default
+`auto`, the channelizer). Up to v0.9.x `web888.txt` alone decided: the
+standard bitstream up to v0.6.0 without the line, the channelizer from
+v0.7.0 (v0.2.0 and v0.3.0's `-channelizer` image only had the line set).
 
 Units on v0.1.0 or v0.2.0 have no RAUC: write the v0.3.0 card image
 once, and update over the network from then on.
@@ -49,13 +49,39 @@ reboot
 A power cut during an install leaves the old slot as it was. The unit
 boots it, and the install can simply be run again.
 
-## What an update doesn't change
+## The boot loader
 
-* `BOOT.BIN` and `u-boot.img` on the card's FAT partition. They aren't
-  A/B, so a mistake there could leave the unit unbootable, and an update
-  leaves them alone. A release that needs new ones will say so, and they
-  are then copied to the card by hand.
-* The U-Boot environment (the boot chooser's state) carries over.
+`BOOT.BIN` (the U-Boot SPL) and `u-boot.img` on the card's FAT are not
+part of an update: the Zynq's boot ROM reads one `BOOT.BIN` from the card
+and has nothing to fall back to, so they can't be A/B like the system.
+From v0.10.0 each system carries its own copy (`/usr/share/web888/boot`),
+and the owner decides when the card gets it:
+
+* **From the admin page:** **Update**, **Boot loader** says whether the
+  card has this system's boot loader, and **Write it to the card** puts
+  it there.
+* **Over SSH:** `web888-bootloader` (status) and `web888-bootloader
+  install`.
+
+It is written only from a system that has booted well (marked good,
+not in safe mode), and only on a unit started by this image's own boot
+loader (not chain-loaded). The files are checked against the system's
+checksums, written next to the old ones, read back, then renamed into
+place; the old ones stay as `boot.bin.old` and `u-boot.img.old`. The
+receiver keeps running; the new boot loader starts at the next reboot.
+
+**Be prepared to re-image the card.** A power cut in the second or two
+the files are renamed, or a boot loader that doesn't start on your board,
+leaves the unit unable to boot. Then, on a computer: rename
+`boot.bin.old` and `u-boot.img.old` on the `WEB888` drive back to
+`boot.bin` and `u-boot.img`, or write the card image again and restore
+the settings (admin page, Configuration, **Backup**:
+[owner-guide.md](owner-guide.md)). A release that ships a new boot loader
+says so and why in its notes; there is no need to write it otherwise.
+
+The U-Boot environment (the boot chooser's state) carries over: it sits
+outside the FAT, and each U-Boot takes its own scripts from its build
+(`web888.env`).
 
 ## Signing
 

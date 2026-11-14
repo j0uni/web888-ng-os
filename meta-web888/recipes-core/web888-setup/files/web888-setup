@@ -456,13 +456,14 @@ safe_setting() {
 
 # ------------------------------------------------------------ bitstream
 
-# channelizer (the default since v0.7.0): the channelizer bitstream on the
-# command line, which web888d then runs with its tuner (over its
-# configuration); standard: web888d's own choice (its configuration, by
-# default the HF bitstream with 12 receivers). The band:
-# hf (the default, web888d's configuration) or vhf (the VHF input,
-# 98.304..147.456 MHz: web888d sets the ADC clock and takes the VHF
-# bitstreams, the channelizer's websdr_pfb_vhf.bit)
+# Only a bitstream or band set in web888.txt goes on web888d's command
+# line (over its configuration); without one, web888d's configuration
+# decides, which the admin page edits (`[radio] bitstream`, default auto:
+# the channelizer for the band since web888d v0.13.0). channelizer: the
+# image's channelizer for the band; standard: the band's standard
+# bitstream (12 receivers on HF). The band: hf (web888d's configuration)
+# or vhf (the VHF input, 98.304..147.456 MHz: web888d sets the ADC clock
+# and takes the VHF bitstreams).
 bitstream_setting() {
 	mkdir -p "$(dirname "$WEB888D_ENV")"
 	if [ -n "$safe_why" ]; then
@@ -472,24 +473,29 @@ bitstream_setting() {
 	fi
 	extra="" pfb=websdr_pfb.bit
 	case $band in
-	'' | hf) ;;
+	'') ;;
+	hf) extra="--band hf" ;;
 	vhf)
 		extra="--band vhf" pfb=websdr_pfb_vhf.bit
 		say "band: VHF, 98.304-147.456 MHz (experimental)"
 		;;
-	*) problem "band = \"$band\": hf or vhf; hf" ;;
+	*) problem "band = \"$band\": hf or vhf; web888d's setting" ;;
 	esac
 	case $bitstream in
-	standard) say "bitstream: standard" ;;
-	'' | channelizer)
+	'') say "bitstream: web888d's setting (the admin page; default the channelizer)" ;;
+	standard)
+		extra="${extra:+$extra }--bitstream standard"
+		say "bitstream: standard (web888.txt: over the admin page's setting)"
+		;;
+	channelizer)
 		if [ -e "$BITDIR/$pfb" ]; then
-			extra="${extra:+$extra }--bitstream $BITDIR/$pfb"
-			say "bitstream: channelizer"
+			extra="${extra:+$extra }--bitstream channelizer"
+			say "bitstream: channelizer (web888.txt: over the admin page's setting)"
 		else
-			problem "bitstream = channelizer: $pfb is not in this image; the standard one"
+			problem "bitstream = channelizer: $pfb is not in this image; web888d's setting"
 		fi
 		;;
-	*) problem "bitstream = \"$bitstream\": standard or channelizer; the standard one" ;;
+	*) problem "bitstream = \"$bitstream\": standard or channelizer; web888d's setting" ;;
 	esac
 	echo "WEB888D_EXTRA=\"$extra\"" > "$WEB888D_ENV"
 }
