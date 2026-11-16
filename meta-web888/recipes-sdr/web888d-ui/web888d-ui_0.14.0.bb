@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0-or-later;md5=1c76c4cc35
 
 SRC_URI = "https://github.com/jeskko/web888-ng/releases/download/v${PV}/web888d-ui-v${PV}.tar.gz;subdir=ui"
 # from the release's SHA256SUMS
-SRC_URI[sha256sum] = "dde5e9902bc63ad697f55b103fb389ae854ebf048b805e636dbf2f46e6f6c718"
+SRC_URI[sha256sum] = "e3df497e7b883ec5182e0a8180bcc38a362ab319db7142fc0bc07a0a9098ff65"
 
 S = "${UNPACKDIR}/ui"
 

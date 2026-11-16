@@ -24,9 +24,11 @@ skimmers on less CPU), v0.9.0 (web888d v0.12.0: live DX spots, a map
 of the stations heard, OS updates from the admin page, metrics) and
 v0.9.1 (security: kernel 6.18.63, newer packages, unused ones removed),
 v0.9.2 (no unassessed CVEs of CVSS 7.0 or more), v0.9.3 (safe mode:
-a unit that keeps failing to start stays reachable; web888d v0.12.1) and
+a unit that keeps failing to start stays reachable; web888d v0.12.1),
 v0.10.0 (logs and a settings backup on the admin page, the card's boot
-loader updated when the owner asks, the owner's guide; web888d v0.13.0).
+loader updated when the owner asks, the owner's guide; web888d v0.13.0)
+and v0.11.0 (web888d v0.14.0: decoders in the browser, AM AGC speeds,
+24 kS/s audio).
 
 What the image is:
 
