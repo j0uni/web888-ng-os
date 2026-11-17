@@ -428,3 +428,4 @@ SRC_URI += " \
     git://github.com/jeskko/hfcast-engine;protocol=https;nobranch=1;name=hfcast;destsuffix=cargo-git/hfcast \
 "
 SRCREV_hfcast = "bf34e8f9f375e190ed43fcac19f25d800992e0e6"
+SRCREV_FORMAT = "default_hfcast"

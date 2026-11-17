@@ -47,3 +47,6 @@ if git:
     print('"')
     for p in git:
         print(f'SRCREV_{p["name"]} = "{p["source"].split("#")[1]}"')
+    # more than one git source: bitbake wants the format of the combined
+    # revision (the recipe's own source is "default")
+    print(f'SRCREV_FORMAT = "{"_".join(["default"] + [p["name"] for p in git])}"')
