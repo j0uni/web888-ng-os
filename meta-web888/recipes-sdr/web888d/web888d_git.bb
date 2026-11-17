@@ -21,6 +21,10 @@ inherit cargo cargo-update-recipe-crates systemd
 
 require ${BPN}-crates.inc
 
+# opus1 (the Opus encoder) declares Rust 1.98; wrynose's is 1.94.1. The
+# patch drops its three cold_path() hints, the only newer thing it uses
+SRC_URI += "file://opus1-0.3.0-rust-1.94.patch;patchdir=${CARGO_VENDORING_DIRECTORY}/opus1-0.3.0"
+
 # the workspace also holds test tools; only the daemon goes on the device
 CARGO_BUILD_FLAGS += "--package web888d"
 

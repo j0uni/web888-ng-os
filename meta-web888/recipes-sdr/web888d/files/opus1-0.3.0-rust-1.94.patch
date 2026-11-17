@@ -1,0 +1,44 @@
+From: web888-ng <web888-ng@users.noreply.github.com>
+Subject: [PATCH] opus1 0.3.0: build with Rust 1.94 (wrynose)
+
+Upstream-Status: Inappropriate [oe-core wrynose has Rust 1.94.1; opus1
+declares 1.98 and calls core::hint::cold_path(), stable from 1.95]
+
+Drops the three cold_path() hints (they only tell the optimiser a branch
+is rare) and lowers rust-version to 1.94. Drop this patch when the
+image's Rust is 1.98 or newer.
+
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -11,7 +11,7 @@
+ 
+ [package]
+ edition = "2024"
+-rust-version = "1.98"
++rust-version = "1.94"
+ name = "opus1"
+ version = "0.3.0"
+ authors = [
+--- a/src/pitch.rs
++++ b/src/pitch.rs
+@@ -2364,7 +2364,6 @@
+         self.syy = s;
+         self.next = end;
+         if below_one(table) || s < 1.0 {
+-            core::hint::cold_path();
+             (self.next, self.syy) = (start, first);
+             self.fill_exact(end);
+         }
+@@ -2401,12 +2400,10 @@
+         b.next += count;
+         let (redo_a, redo_b) = (below_one(ta) || sa < 1.0, below_one(tb) || sb < 1.0);
+         if redo_a {
+-            core::hint::cold_path();
+             (a.next, a.syy) = (ia, fa);
+             a.fill_exact(ia + count);
+         }
+         if redo_b {
+-            core::hint::cold_path();
+             (b.next, b.syy) = (ib, fb);
+             b.fill_exact(ib + count);
+         }
