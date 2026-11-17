@@ -42,6 +42,7 @@ CVE_STATUS[CVE-2026-90030] = "not-applicable-config: USB dwc3 (drivers/usb/dwc3)
 CVE_STATUS[CVE-2026-90214] = "not-applicable-config: Xilinx audio formatter (sound/soc/xilinx), not built"
 CVE_STATUS[CVE-2026-98767] = "not-applicable-config: USB dwc3 (drivers/usb/dwc3), not built (Zynq-7000 has ChipIdea USB)"
 CVE_STATUS[CVE-2026-99028] = "not-applicable-config: AXI Ethernet (drivers/net/ethernet/xilinx/xilinx_axienet*), built but no such device: the FPGA design has none, the board's Ethernet is the PS GEM"
+CVE_STATUS[CVE-2026-89788] = "not-applicable-config: ksmbd, the in-kernel SMB server (fs/smb/server), not built (CONFIG_SMB_SERVER is not set)"
 
 # Not fixed in 6.18.63 yet; the mainline fix applies as it is
 SRC_URI += "file://CVE-2026-72397.patch"
