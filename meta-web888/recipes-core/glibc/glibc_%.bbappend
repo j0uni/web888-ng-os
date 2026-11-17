@@ -8,3 +8,6 @@ CVE_STATUS[CVE-2026-5450] = "backported-patch: release/2.43/master 4070d808 (sca
 CVE_STATUS[CVE-2026-5928] = "backported-patch: release/2.43/master 2890b35c (ungetwc on a byte stream, BZ #33998)"
 CVE_STATUS[CVE-2026-19499] = "backported-patch: release/2.43/master 713998bf (strfmon right-justification, bug 34510)"
 CVE_STATUS[CVE-2026-84243] = "backported-patch: release/2.43/master 45e49b1e (intl: LANGUAGE path traversal, BZ #17142)"
+# No program in the image calls these (their dynamic imports, 2026-11-17)
+CVE_STATUS[CVE-2026-115819] = "not-applicable-config: the wide scanf functions (swscanf, fwscanf, wscanf, ...), which no program in the image calls"
+CVE_STATUS[CVE-2010-4756] = "not-applicable-config: glob() with an attacker's pattern (an FTP daemon's STAT); no program in the image calls glob()"

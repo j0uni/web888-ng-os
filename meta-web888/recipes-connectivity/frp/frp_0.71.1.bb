@@ -35,3 +35,7 @@ do_install() {
 }
 
 COMPATIBLE_HOST = "arm.*-linux"
+
+# Only frpc is installed, and web888-setup gives it no webServer section:
+# the admin listener (with the pprof handlers) never starts.
+CVE_STATUS[CVE-2026-110619] = "not-applicable-config: frps is not installed and frpc's admin web server is not configured (no webServer in the frpc.toml web888-setup writes)"

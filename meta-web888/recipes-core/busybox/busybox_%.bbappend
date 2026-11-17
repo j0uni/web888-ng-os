@@ -7,3 +7,7 @@
 CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_BUSYBOX"
 CVE_STATUS_WEB888_BUSYBOX = "CVE-2026-38752 CVE-2026-38753 CVE-2026-38755"
 CVE_STATUS_WEB888_BUSYBOX[status] = "not-reachable: needs a crafted awk program or shell script run on the unit; only root can run commands and no service passes outside input to awk or the shell"
+# Symlink traversal when extracting an archive (tar, unzip, cpio):
+# nothing on the unit extracts archives (RAUC bundles are signed
+# SquashFS), only root could by hand
+CVE_STATUS[CVE-2026-92205] = "not-reachable: needs a crafted archive extracted on the unit; no service extracts archives, and only root can run commands"

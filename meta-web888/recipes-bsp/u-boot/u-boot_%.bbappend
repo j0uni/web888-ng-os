@@ -33,5 +33,8 @@ do_configure:prepend() {
 # Flaws in U-Boot's network stack, which web888.cfg leaves out
 # (CONFIG_NO_NET: the boot is from the SD card only)
 CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_UBOOT_NET"
-CVE_STATUS_WEB888_UBOOT_NET = "CVE-2026-29008 CVE-2026-71971 CVE-2026-74220 CVE-2026-74221 CVE-2026-74222 CVE-2026-74225"
+CVE_STATUS_WEB888_UBOOT_NET = "CVE-2026-29008 CVE-2026-71971 CVE-2026-74220 CVE-2026-74221 CVE-2026-74222 CVE-2026-74225 CVE-2026-29007"
 CVE_STATUS_WEB888_UBOOT_NET[status] = "not-applicable-config: U-Boot is built without networking (CONFIG_NO_NET)"
+CVE_STATUS[CVE-2026-71974] = "not-applicable-config: the Android boot method is not built (only efi, efi_mgr and extlinux bootmeths)"
+CVE_STATUS[CVE-2026-71972] = "not-applicable-config: U-Boot is built without video or BMP support"
+CVE_STATUS[CVE-2026-71973] = "not-reachable: U-Boot reads SquashFS only from the rootfs slots, which RAUC writes from signed bundles; a crafted image needs root or the SD card in hand, and with either U-Boot itself can be replaced"

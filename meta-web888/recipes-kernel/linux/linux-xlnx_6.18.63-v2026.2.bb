@@ -47,22 +47,24 @@ CVE_STATUS[CVE-2026-89788] = "not-applicable-config: ksmbd, the in-kernel SMB se
 # Not fixed in 6.18.63 yet; the mainline fix applies as it is
 SRC_URI += "file://CVE-2026-72397.patch"
 
-# Open in 6.18.63 (the daily scan, CVSS 7.0 or more), checked against this
-# kernel's configuration (/proc/config.gz on a unit) and the Makefiles
-# that build each fix's files (2026-11-13). Not built here:
+# Open in 6.18.63 (the daily scan), checked against this kernel's
+# configuration (/proc/config.gz on a unit) and the Makefiles that build
+# each fix's files (CVSS 7.0 or more 2026-11-13, the rest 2026-11-17:
+# whether each fix's files were compiled, in a build tree of this
+# kernel). Not built here:
 CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_K_BPF CVE_STATUS_WEB888_K_NETFS CVE_STATUS_WEB888_K_SMB \
     CVE_STATUS_WEB888_K_OCFS2 CVE_STATUS_WEB888_K_AMD CVE_STATUS_WEB888_K_FB"
-CVE_STATUS_WEB888_K_BPF = "CVE-2026-74354 CVE-2026-98376 CVE-2026-98869"
+CVE_STATUS_WEB888_K_BPF = "CVE-2026-74354 CVE-2026-98376 CVE-2026-98869 CVE-2026-98813 CVE-2026-98789 CVE-2026-98599 CVE-2026-98589 CVE-2026-98628 CVE-2026-93270 CVE-2026-93135 CVE-2026-93044 CVE-2026-53106"
 CVE_STATUS_WEB888_K_BPF[status] = "not-applicable-config: the bpf() syscall, its maps and verifier are not built (CONFIG_BPF_SYSCALL off)"
 CVE_STATUS_WEB888_K_NETFS = "CVE-2026-64160 CVE-2026-98118"
 CVE_STATUS_WEB888_K_NETFS[status] = "not-applicable-config: netfs and the network file systems using it are not built (CONFIG_NETFS_SUPPORT, 9P_FS, AFS_FS, CIFS off)"
-CVE_STATUS_WEB888_K_SMB = "CVE-2026-89630 CVE-2026-89632 CVE-2026-98115"
+CVE_STATUS_WEB888_K_SMB = "CVE-2026-89630 CVE-2026-89632 CVE-2026-98115 CVE-2026-99275 CVE-2026-99272 CVE-2026-97563 CVE-2026-31710 CVE-2026-98125 CVE-2026-98124"
 CVE_STATUS_WEB888_K_SMB[status] = "not-applicable-config: the SMB client and server are not built (CONFIG_CIFS, CONFIG_SMB_SERVER off)"
 CVE_STATUS_WEB888_K_OCFS2 = "CVE-2026-90320 CVE-2026-90321"
 CVE_STATUS_WEB888_K_OCFS2[status] = "not-applicable-config: OCFS2 is not built (CONFIG_OCFS2_FS off)"
-CVE_STATUS_WEB888_K_AMD = "CVE-2026-68103 CVE-2026-68447 CVE-2026-74419 CVE-2026-98436 CVE-2026-89805"
+CVE_STATUS_WEB888_K_AMD = "CVE-2026-68103 CVE-2026-68447 CVE-2026-74419 CVE-2026-98436 CVE-2026-89805 CVE-2026-98926 CVE-2026-98144 CVE-2026-80657 CVE-2026-43446 CVE-2026-23295 CVE-2026-43131 CVE-2026-98106"
 CVE_STATUS_WEB888_K_AMD[status] = "not-applicable-config: GPU and accelerator drivers are not built (CONFIG_DRM_AMDGPU, DRM_ACCEL_AMDXDNA, DRM_GPUSVM off)"
-CVE_STATUS_WEB888_K_FB = "CVE-2026-80579 CVE-2026-80580"
+CVE_STATUS_WEB888_K_FB = "CVE-2026-80579 CVE-2026-80580 CVE-2026-80785"
 CVE_STATUS_WEB888_K_FB[status] = "not-applicable-config: the framebuffer core is not built (CONFIG_FB_CORE off)"
 CVE_STATUS[CVE-2025-71074] = "not-applicable-config: USB gadget FunctionFS is not built (CONFIG_USB_F_FS off)"
 CVE_STATUS[CVE-2026-100072] = "not-applicable-config: ACPI is not built (an ARM device-tree system)"
@@ -81,3 +83,37 @@ CVE_STATUS[CVE-2019-14899] = "not-applicable-config: needs a VPN tunnel interfac
 CVE_STATUS[CVE-2021-3864] = "mitigated: needs core dumps of a SUID program's descendants; fs.suid_dumpable is 0 and systemd sets kernel.core_pattern to |/bin/false (no coredump handler), and root is the only account with a login"
 CVE_STATUS[CVE-2026-53091] = "not-reachable: a malformed GSO packet has to come from TUN/TAP or virtio (not built) or a raw packet socket (CAP_NET_RAW: root and systemd-networkd only); forwarding is off. The mainline fix needs a transmit-path refactor 6.18 doesn't have"
 CVE_STATUS[CVE-2026-89584] = "not-reachable: needs direct I/O with crafted vectors against a bio-based block device; here only dm-verity during a RAUC install, whose nodes are root's, and root is the only account with a login"
+
+# The rest of the scan (2026-11-17, all below CVSS 7.0 or unscored).
+# Drivers for hardware a Web-888 doesn't have, not built:
+CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_K_HW CVE_STATUS_WEB888_K_FS CVE_STATUS_WEB888_K_ARCH"
+CVE_STATUS_WEB888_K_HW = "CVE-2026-98966 CVE-2026-98946 CVE-2026-93047 CVE-2026-98824 CVE-2026-98810 \
+    CVE-2026-98338 CVE-2026-98333 CVE-2026-98332 CVE-2026-98815 CVE-2026-98814 CVE-2026-98153 CVE-2023-6238 \
+    CVE-2026-98617 CVE-2026-98562 CVE-2026-98288 CVE-2026-98355 CVE-2026-98292 CVE-2026-90098 CVE-2026-89862 \
+    CVE-2026-74272 CVE-2026-43095"
+CVE_STATUS_WEB888_K_HW[status] = "not-applicable-config: a driver for hardware the board doesn't have, not built (bonding, vc4/v3d GPUs, Wi-Fi: CFG80211/MAC80211, NVMe, fbnic, libwx, stmmac, InfiniBand, Bluetooth, sparx5, qla2xxx, CXL, SoundWire SDCA all off)"
+CVE_STATUS_WEB888_K_FS = "CVE-2026-98960 CVE-2026-89772 CVE-2026-80899 CVE-2026-72377"
+CVE_STATUS_WEB888_K_FS[status] = "not-applicable-config: the file system is not built (CONFIG_BTRFS_FS, EROFS_FS, AFS_FS off)"
+CVE_STATUS_WEB888_K_ARCH = "CVE-2026-99125 CVE-2026-97526 CVE-2026-98652 CVE-2026-90211 CVE-2026-93181 CVE-2026-98551"
+CVE_STATUS_WEB888_K_ARCH[status] = "not-applicable-platform: s390, x86 or arm64 code; this is a 32-bit ARM (Zynq-7000) kernel"
+CVE_STATUS[CVE-2026-98816] = "not-applicable-config: constant blinding is part of the BPF JIT, which is not built (CONFIG_BPF_JIT off)"
+CVE_STATUS[CVE-2026-98938] = "not-applicable-config: Rust support is not built (CONFIG_RUST off)"
+CVE_STATUS[CVE-2026-98972] = "not-applicable-config: cpusets are not built (CONFIG_CPUSETS off)"
+CVE_STATUS[CVE-2026-98802] = "not-applicable-config: IPv6 segment routing is not built (CONFIG_IPV6_SEG6_LWTUNNEL off)"
+CVE_STATUS[CVE-2026-93216] = "not-applicable-config: page_owner is not built (CONFIG_PAGE_OWNER off)"
+CVE_STATUS[CVE-2026-68086] = "not-applicable-config: khugepaged is not built (no CONFIG_TRANSPARENT_HUGEPAGE on 32-bit ARM)"
+CVE_STATUS[CVE-2026-46017] = "not-applicable-config: the deferred split queue is part of transparent huge pages, which are not built (CONFIG_TRANSPARENT_HUGEPAGE off)"
+CVE_STATUS[CVE-2026-43326] = "not-applicable-config: sched_ext is not built (CONFIG_SCHED_CLASS_EXT off)"
+CVE_STATUS[CVE-2026-43174] = "not-applicable-config: io_uring zero-copy receive is not built (CONFIG_IO_URING_ZCRX off)"
+CVE_STATUS[CVE-2026-98427] = "not-applicable-config: CoDel is not built (CONFIG_NET_SCH_CODEL, NET_SCH_FQ_CODEL and MAC80211 off)"
+CVE_STATUS[CVE-2026-74342] = "not-applicable-config: needs an LSM with a kernfs_init_security hook (SELinux); CONFIG_SECURITY is off"
+CVE_STATUS[CVE-2026-98285] = "not-applicable-config: bridge VLAN filtering is not built (CONFIG_BRIDGE_VLAN_FILTERING off), and the bridge module is not installed in the image"
+CVE_STATUS[CVE-2026-46153] = "not-applicable-config: 802.1Q is built as a module (CONFIG_VLAN_8021Q=m) that the image doesn't install"
+CVE_STATUS[CVE-2021-3714] = "not-applicable-config: memory deduplication is not built (CONFIG_KSM off)"
+CVE_STATUS[CVE-2023-6240] = "not-applicable-config: the kernel's RSA is not built (CONFIG_CRYPTO_RSA off)"
+CVE_STATUS[CVE-2020-10774] = "not-applicable-config: /proc/sys/kernel/rh_features is in Red Hat's kernels only"
+CVE_STATUS[CVE-2026-98983] = "not-reachable: unshare() of a namespace needs CAP_SYS_ADMIN (no user namespaces: CONFIG_NAMESPACES off) and then a failed allocation; root is the only account with a login"
+CVE_STATUS[CVE-2026-98747] = "not-reachable: on unregistering a serial port that has no port device: unbinding the UART driver (root, through sysfs) or a failed probe; the board's UART is the Zynq PS UART, always present"
+CVE_STATUS[CVE-2026-98558] = "not-reachable: needs a CPU taken offline (root, through sysfs); both CPUs stay online"
+CVE_STATUS[CVE-2010-4563] = "not-reachable: tells whether an interface is in promiscuous mode; none is (no tcpdump or other sniffer in the image)"
+CVE_STATUS[CVE-1999-0524] = "upstream-wontfix: Linux answers ICMP timestamp requests (RFC 792) by design and never address mask requests; the clock it gives away is UTC, which the receiver shows anyway"

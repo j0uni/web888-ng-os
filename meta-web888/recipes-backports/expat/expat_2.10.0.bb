@@ -36,3 +36,8 @@ do_install_ptest:class-target() {
 BBCLASSEXTEND += "native nativesdk"
 
 CVE_PRODUCT = "expat libexpat"
+
+# Not fixed in 2.10.0 yet (2026-11-17). The image's users of libexpat are
+# dbus and avahi-daemon; xmlwf (expat-bin) is not installed.
+CVE_STATUS[CVE-2026-128241] = "not-applicable-config: in xmlwf, which the image doesn't install"
+CVE_STATUS[CVE-2026-124317] = "not-applicable-config: only with an application's unknown-encoding handler; no program in the image registers one (XML_SetUnknownEncodingHandler)"
