@@ -104,6 +104,7 @@ SRC_URI += " \
     crate://crates.io/oid-registry/0.8.1 \
     crate://crates.io/once_cell/1.21.4 \
     crate://crates.io/once_cell_polyfill/1.70.2 \
+    crate://crates.io/opus1/0.3.0 \
     crate://crates.io/password-hash/0.6.1 \
     crate://crates.io/pem/4.0.0 \
     crate://crates.io/percent-encoding/2.3.2 \
@@ -314,6 +315,7 @@ SRC_URI[num-traits-0.2.19.sha256sum] = "071dfc062690e90b734c0b2273ce72ad0ffa95f0
 SRC_URI[oid-registry-0.8.1.sha256sum] = "12f40cff3dde1b6087cc5d5f5d4d65712f34016a03ed60e9c08dcc392736b5b7"
 SRC_URI[once_cell-1.21.4.sha256sum] = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 SRC_URI[once_cell_polyfill-1.70.2.sha256sum] = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
+SRC_URI[opus1-0.3.0.sha256sum] = "8371789de09e00d6805166461224f024848c1fd155c6df28da8c19eebcc3650d"
 SRC_URI[password-hash-0.6.1.sha256sum] = "aab41826031698d6ffcd9cff78ef56ef998e39dc7e5067cdfebe373842d4723b"
 SRC_URI[pem-4.0.0.sha256sum] = "d354a98a3d1251555de99e8fdd8afda05573c31b82f59063a7b0a29b5527f120"
 SRC_URI[percent-encoding-2.3.2.sha256sum] = "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220"
@@ -421,3 +423,8 @@ SRC_URI[zerocopy-derive-0.8.63.sha256sum] = "863ad3ac83293fb4d740aedbfdc9240dd8d
 SRC_URI[zeroize-1.9.1.sha256sum] = "e13084392c5e4bc371903e2935a5eaeed24905a7511356b883835e18a78f6879"
 SRC_URI[zlib-rs-0.6.8.sha256sum] = "b268e58e7c693d7c271f93ffc4ba3b380412554231c85bf61ca7af91042a4112"
 SRC_URI[zmij-1.0.23.sha256sum] = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
+
+SRC_URI += " \
+    git://github.com/jeskko/hfcast-engine;protocol=https;nobranch=1;name=hfcast;destsuffix=cargo-git/hfcast \
+"
+SRCREV_hfcast = "bf34e8f9f375e190ed43fcac19f25d800992e0e6"

@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Write web888d-crates.inc from web888-ng's Cargo.lock, in the format of
 `bitbake -c update_crates web888d` (which can't write into the read-only
-layer mount of scripts/kas-podman.sh).
+layer mount of scripts/kas-podman.sh), plus the git dependencies, which
+update_crates leaves to the recipe.
 
     scripts/gen-crates-inc.py ../server/Cargo.lock \\
         > meta-web888/recipes-sdr/web888d/web888d-crates.inc
@@ -28,3 +29,21 @@ print('"')
 print()
 for p in pkgs:
     print(f'SRC_URI[{p["name"]}-{p["version"]}.sha256sum] = "{p["checksum"]}"')
+
+# Git dependencies: fetched by name, and cargo_common_do_patch_paths turns
+# each (name, destsuffix) into a [patch."<repository>"] entry
+git = sorted(
+    (p for p in lock["package"] if p.get("source", "").startswith("git+")),
+    key=lambda p: p["name"],
+)
+if git:
+    print()
+    print('SRC_URI += " \\')
+    for p in git:
+        url, rev = p["source"][len("git+"):].split("#")
+        url = url.split("?")[0]
+        scheme, rest = url.split("://", 1)
+        print(f"    git://{rest};protocol={scheme};nobranch=1;name={p['name']};destsuffix=cargo-git/{p['name']} \\")
+    print('"')
+    for p in git:
+        print(f'SRCREV_{p["name"]} = "{p["source"].split("#")[1]}"')

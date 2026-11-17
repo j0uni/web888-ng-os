@@ -11,9 +11,9 @@ SRC_URI = "git://github.com/jeskko/web888-ng.git;protocol=https;branch=main \
            file://web888d-safe.service \
            file://web888d.default \
            "
-# v0.14.0 (decoders in the browser, AM AGC speeds, 24 kS/s audio)
-SRCREV = "5bb898dd2135a6830917f5bd26b87766f5d5f7d2"
-PV = "0.14.0"
+# v0.15.0 (listener tools, Opus, packed waterfall, propagation, ADC overload events, info page, access limits)
+SRCREV = "8a2b8f07e053fc65454036c90350ddf78045636c"
+PV = "0.15.0"
 
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 
