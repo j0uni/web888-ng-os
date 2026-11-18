@@ -12,8 +12,8 @@ SRC_URI = "git://github.com/jeskko/web888-ng.git;protocol=https;branch=main \
            file://web888d.default \
            "
 # v0.15.0 (listener tools, Opus, packed waterfall, propagation, ADC overload events, info page, access limits)
-SRCREV = "8a2b8f07e053fc65454036c90350ddf78045636c"
-PV = "0.15.0"
+SRCREV = "ad3d6152a3b5ff3179ff9884b864eec57ed39bf0"
+PV = "0.16.0"
 
 S = "${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}"
 

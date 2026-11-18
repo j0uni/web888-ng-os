@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0-or-later;md5=1c76c4cc35
 
 SRC_URI = "https://github.com/jeskko/web888-ng/releases/download/v${PV}/web888d-ui-v${PV}.tar.gz;subdir=ui"
 # from the release's SHA256SUMS
-SRC_URI[sha256sum] = "fc5fb462fac1b6d393418340b0280941363c9d05a78e6bd8af90e1f66d95c4c5"
+SRC_URI[sha256sum] = "def73558a009f3593056f29b8746ae2790bf201f69477d660145967601ee73ef"
 
 S = "${UNPACKDIR}/ui"
 
@@ -27,6 +27,9 @@ do_install() {
 	# the map's world
 	install -d ${D}${datadir}/web888d/ui/map
 	install -m 0644 ${S}/map/*.json ${D}${datadir}/web888d/ui/map/
+	# the translations (index.json and one catalogue per language)
+	install -d ${D}${datadir}/web888d/ui/i18n
+	install -m 0644 ${S}/i18n/*.json ${D}${datadir}/web888d/ui/i18n/
 }
 
 FILES:${PN} = "${datadir}/web888d/ui"
