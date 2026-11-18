@@ -28,9 +28,10 @@ a unit that keeps failing to start stays reachable; web888d v0.12.1),
 v0.10.0 (logs and a settings backup on the admin page, the card's boot
 loader updated when the owner asks, the owner's guide; web888d v0.13.0),
 v0.11.0 (web888d v0.14.0: decoders in the browser, AM AGC speeds,
-24 kS/s audio) and v0.12.0 (web888d v0.15.0: listener tools, Opus
+24 kS/s audio), v0.12.0 (web888d v0.15.0: listener tools, Opus
 audio, HF propagation forecasts, ADC overload events, an info page,
-access limits; every CVE in the image assessed).
+access limits; every CVE in the image assessed) and v0.13.0 (web888d
+v0.16.0: the page in Finnish, Swedish and German, a Config box).
 
 What the image is:
 
