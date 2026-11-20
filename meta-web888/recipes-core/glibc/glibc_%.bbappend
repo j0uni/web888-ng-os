@@ -11,3 +11,6 @@ CVE_STATUS[CVE-2026-84243] = "backported-patch: release/2.43/master 45e49b1e (in
 # No program in the image calls these (their dynamic imports, 2026-11-17)
 CVE_STATUS[CVE-2026-115819] = "not-applicable-config: the wide scanf functions (swscanf, fwscanf, wscanf, ...), which no program in the image calls"
 CVE_STATUS[CVE-2010-4756] = "not-applicable-config: glob() with an attacker's pattern (an FTP daemon's STAT); no program in the image calls glob()"
+# The scan of 2026-11-20 (the image's dynamic imports and files)
+CVE_STATUS[CVE-2026-126765] = "not-applicable-config: glob() after a failed allocation; no program in the image calls glob()"
+CVE_STATUS[CVE-2026-121758] = "not-applicable-config: the ISO-2022-CN-EXT converter is a gconv module, and the image installs none (no /usr/lib/gconv)"

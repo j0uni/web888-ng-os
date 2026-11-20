@@ -1,16 +1,17 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Xilinx's 2026.2 kernel (linux-xlnx xlnx_rebase_v6.18_LTS, 6.18.40; the
 # recipe as meta-xilinx's wrynose-next has it) with the stable updates up
-# to 6.18.63 on top: about 3200 of the CVEs open in 6.18.40 are fixed in
-# 6.18.41 to 6.18.63, which Xilinx hasn't merged yet.
+# to 6.18.64 on top: about 3400 of the CVEs open in 6.18.40 are fixed in
+# 6.18.41 to 6.18.64, which Xilinx hasn't merged yet (6.18.64: 205 more,
+# 2026-11-20).
 #
-# linux-6.18.63-stable.patch.xz is stable v6.18.63 merged into Xilinx's
+# linux-6.18.64-stable.patch.xz is stable v6.18.64 merged into Xilinx's
 # tag, as one commit; scripts/kernel-stable.sh makes it again from the two
 # public trees. Where Xilinx has its own version of a file and the merge
 # conflicts, Xilinx's file is kept and the stable changes to it are left
 # out (the list is in the patch's message). Drop this recipe when
 # meta-xilinx has a kernel at least this new.
-LINUX_VERSION = "6.18.63"
+LINUX_VERSION = "6.18.64"
 YOCTO_META ?= "git://git.yoctoproject.org/yocto-kernel-cache;type=kmeta;name=meta;branch=yocto-6.18;destsuffix=yocto-kmeta"
 KBRANCH = "xlnx_rebase_v6.18_LTS"
 SRCREV = "85261a88dc955839e3dabe5339b3a8d86ec545db"
@@ -29,8 +30,8 @@ PV .= "+v2026.2"
 # ours, then linux-xlnx.inc's own files (linux-xlnx-kmeta, ...) next to
 # it in meta-xilinx-core
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:${@os.path.dirname(bb.utils.which(d.getVar('BBPATH'), 'recipes-kernel/linux/linux-xlnx.inc'))}/linux-xlnx:"
-SRC_URI += "file://linux-6.18.63-stable.patch.xz"
-# the version check reads the Makefile: after the patch makes it 6.18.63
+SRC_URI += "file://linux-6.18.64-stable.patch.xz"
+# the version check reads the Makefile: after the patch makes it 6.18.64
 addtask kernel_version_sanity_check after do_patch
 
 # Fixed in stable after 6.18.40 only in files where Xilinx's version is
@@ -44,7 +45,7 @@ CVE_STATUS[CVE-2026-98767] = "not-applicable-config: USB dwc3 (drivers/usb/dwc3)
 CVE_STATUS[CVE-2026-99028] = "not-applicable-config: AXI Ethernet (drivers/net/ethernet/xilinx/xilinx_axienet*), built but no such device: the FPGA design has none, the board's Ethernet is the PS GEM"
 CVE_STATUS[CVE-2026-89788] = "not-applicable-config: ksmbd, the in-kernel SMB server (fs/smb/server), not built (CONFIG_SMB_SERVER is not set)"
 
-# Not fixed in 6.18.63 yet; the mainline fix applies as it is
+# Not fixed in 6.18.64 yet; the mainline fix applies as it is
 SRC_URI += "file://CVE-2026-72397.patch"
 
 # Open in 6.18.63 (the daily scan), checked against this kernel's
@@ -58,11 +59,11 @@ CVE_STATUS_WEB888_K_BPF = "CVE-2026-74354 CVE-2026-98376 CVE-2026-98869 CVE-2026
 CVE_STATUS_WEB888_K_BPF[status] = "not-applicable-config: the bpf() syscall, its maps and verifier are not built (CONFIG_BPF_SYSCALL off)"
 CVE_STATUS_WEB888_K_NETFS = "CVE-2026-64160 CVE-2026-98118"
 CVE_STATUS_WEB888_K_NETFS[status] = "not-applicable-config: netfs and the network file systems using it are not built (CONFIG_NETFS_SUPPORT, 9P_FS, AFS_FS, CIFS off)"
-CVE_STATUS_WEB888_K_SMB = "CVE-2026-89630 CVE-2026-89632 CVE-2026-98115 CVE-2026-99275 CVE-2026-99272 CVE-2026-97563 CVE-2026-31710 CVE-2026-98125 CVE-2026-98124"
+CVE_STATUS_WEB888_K_SMB = "CVE-2026-99381 CVE-2026-99749 CVE-2026-99792 CVE-2026-89630 CVE-2026-89632 CVE-2026-98115 CVE-2026-99275 CVE-2026-99272 CVE-2026-97563 CVE-2026-31710 CVE-2026-98125 CVE-2026-98124"
 CVE_STATUS_WEB888_K_SMB[status] = "not-applicable-config: the SMB client and server are not built (CONFIG_CIFS, CONFIG_SMB_SERVER off)"
 CVE_STATUS_WEB888_K_OCFS2 = "CVE-2026-90320 CVE-2026-90321"
 CVE_STATUS_WEB888_K_OCFS2[status] = "not-applicable-config: OCFS2 is not built (CONFIG_OCFS2_FS off)"
-CVE_STATUS_WEB888_K_AMD = "CVE-2026-68103 CVE-2026-68447 CVE-2026-74419 CVE-2026-98436 CVE-2026-89805 CVE-2026-98926 CVE-2026-98144 CVE-2026-80657 CVE-2026-43446 CVE-2026-23295 CVE-2026-43131 CVE-2026-98106"
+CVE_STATUS_WEB888_K_AMD = "CVE-2026-99620 CVE-2026-68103 CVE-2026-68447 CVE-2026-74419 CVE-2026-98436 CVE-2026-89805 CVE-2026-98926 CVE-2026-98144 CVE-2026-80657 CVE-2026-43446 CVE-2026-23295 CVE-2026-43131 CVE-2026-98106"
 CVE_STATUS_WEB888_K_AMD[status] = "not-applicable-config: GPU and accelerator drivers are not built (CONFIG_DRM_AMDGPU, DRM_ACCEL_AMDXDNA, DRM_GPUSVM off)"
 CVE_STATUS_WEB888_K_FB = "CVE-2026-80579 CVE-2026-80580 CVE-2026-80785"
 CVE_STATUS_WEB888_K_FB[status] = "not-applicable-config: the framebuffer core is not built (CONFIG_FB_CORE off)"
@@ -87,15 +88,15 @@ CVE_STATUS[CVE-2026-89584] = "not-reachable: needs direct I/O with crafted vecto
 # The rest of the scan (2026-11-17, all below CVSS 7.0 or unscored).
 # Drivers for hardware a Web-888 doesn't have, not built:
 CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_K_HW CVE_STATUS_WEB888_K_FS CVE_STATUS_WEB888_K_ARCH"
-CVE_STATUS_WEB888_K_HW = "CVE-2026-98966 CVE-2026-98946 CVE-2026-93047 CVE-2026-98824 CVE-2026-98810 \
+CVE_STATUS_WEB888_K_HW = "CVE-2026-99716 CVE-2026-99720 CVE-2026-99746 CVE-2026-98966 CVE-2026-98946 CVE-2026-93047 CVE-2026-98824 CVE-2026-98810 \
     CVE-2026-98338 CVE-2026-98333 CVE-2026-98332 CVE-2026-98815 CVE-2026-98814 CVE-2026-98153 CVE-2023-6238 \
     CVE-2026-98617 CVE-2026-98562 CVE-2026-98288 CVE-2026-98355 CVE-2026-98292 CVE-2026-90098 CVE-2026-89862 \
     CVE-2026-74272 CVE-2026-43095"
-CVE_STATUS_WEB888_K_HW[status] = "not-applicable-config: a driver for hardware the board doesn't have, not built (bonding, vc4/v3d GPUs, Wi-Fi: CFG80211/MAC80211, NVMe, fbnic, libwx, stmmac, InfiniBand, Bluetooth, sparx5, qla2xxx, CXL, SoundWire SDCA all off)"
-CVE_STATUS_WEB888_K_FS = "CVE-2026-98960 CVE-2026-89772 CVE-2026-80899 CVE-2026-72377"
-CVE_STATUS_WEB888_K_FS[status] = "not-applicable-config: the file system is not built (CONFIG_BTRFS_FS, EROFS_FS, AFS_FS off)"
-CVE_STATUS_WEB888_K_ARCH = "CVE-2026-99125 CVE-2026-97526 CVE-2026-98652 CVE-2026-90211 CVE-2026-93181 CVE-2026-98551"
-CVE_STATUS_WEB888_K_ARCH[status] = "not-applicable-platform: s390, x86 or arm64 code; this is a 32-bit ARM (Zynq-7000) kernel"
+CVE_STATUS_WEB888_K_HW[status] = "not-applicable-config: a driver for hardware the board doesn't have, not built (bonding, vc4/v3d GPUs, Wi-Fi: CFG80211/MAC80211, NVMe, fbnic, libwx, stmmac, InfiniBand, Bluetooth, sparx5, qla2xxx, CXL, SoundWire SDCA, x86 coretemp, chipcap2, Intel SOF all off)"
+CVE_STATUS_WEB888_K_FS = "CVE-2026-99756 CVE-2026-99679 CVE-2026-99369 CVE-2026-98960 CVE-2026-89772 CVE-2026-80899 CVE-2026-72377"
+CVE_STATUS_WEB888_K_FS[status] = "not-applicable-config: the file system or file server is not built (CONFIG_BTRFS_FS, EROFS_FS, AFS_FS, XFS_FS, NFSD off)"
+CVE_STATUS_WEB888_K_ARCH = "CVE-2026-99337 CVE-2026-99472 CVE-2026-99493 CVE-2026-99495 CVE-2026-99586 CVE-2026-99125 CVE-2026-97526 CVE-2026-98652 CVE-2026-90211 CVE-2026-93181 CVE-2026-98551"
+CVE_STATUS_WEB888_K_ARCH[status] = "not-applicable-platform: s390, x86 or arm64 code, or KVM (which 32-bit ARM no longer has); this is a 32-bit ARM (Zynq-7000) kernel"
 CVE_STATUS[CVE-2026-98816] = "not-applicable-config: constant blinding is part of the BPF JIT, which is not built (CONFIG_BPF_JIT off)"
 CVE_STATUS[CVE-2026-98938] = "not-applicable-config: Rust support is not built (CONFIG_RUST off)"
 CVE_STATUS[CVE-2026-98972] = "not-applicable-config: cpusets are not built (CONFIG_CPUSETS off)"
@@ -116,4 +117,14 @@ CVE_STATUS[CVE-2026-98983] = "not-reachable: unshare() of a namespace needs CAP_
 CVE_STATUS[CVE-2026-98747] = "not-reachable: on unregistering a serial port that has no port device: unbinding the UART driver (root, through sysfs) or a failed probe; the board's UART is the Zynq PS UART, always present"
 CVE_STATUS[CVE-2026-98558] = "not-reachable: needs a CPU taken offline (root, through sysfs); both CPUs stay online"
 CVE_STATUS[CVE-2010-4563] = "not-reachable: tells whether an interface is in promiscuous mode; none is (no tcpdump or other sniffer in the image)"
+# The scan of 2026-11-20 (unscored yet), the ones 6.18.64 doesn't fix:
+# memory-management features that aren't built
+CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_K_MM"
+CVE_STATUS_WEB888_K_MM = "CVE-2026-99643 CVE-2026-99660 CVE-2026-99669 CVE-2026-99652 CVE-2026-99701 CVE-2026-99650 CVE-2026-99727 CVE-2026-99729"
+CVE_STATUS_WEB888_K_MM[status] = "not-applicable-config: in transparent huge pages, userfaultfd, KSM or device-private memory, none of them built (CONFIG_TRANSPARENT_HUGEPAGE, USERFAULTFD, KSM, DEVICE_PRIVATE off)"
+CVE_STATUS[CVE-2026-99595] = "not-applicable-config: the throttle state is CFS bandwidth control's, which is not built (CONFIG_CFS_BANDWIDTH off)"
+CVE_STATUS[CVE-2026-99674] = "not-reachable: the board has no CAN interface: the Zynq's CAN controllers are disabled in its device tree (no can netdevice to send to)"
+CVE_STATUS_GROUPS += "CVE_STATUS_WEB888_K_SWAP"
+CVE_STATUS_WEB888_K_SWAP = "CVE-2026-99736 CVE-2026-99738"
+CVE_STATUS_WEB888_K_SWAP[status] = "not-reachable: shmem swap-in; the image sets up no swap (only root could add one, and root is the only account with a login)"
 CVE_STATUS[CVE-1999-0524] = "upstream-wontfix: Linux answers ICMP timestamp requests (RFC 792) by design and never address mask requests; the clock it gives away is UTC, which the receiver shows anyway"
