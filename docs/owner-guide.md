@@ -120,7 +120,7 @@ Out to the Internet, each only when its setting is on:
 | `spothole.app` (HTTPS) | live DX cluster spots shown on the spectrum | `dxspots.enabled` (on) |
 | `report.pskreporter.info` (UDP 4739) | uploading FT8/FT4 spots from the skimmers | `report.pskreporter` (off; needs `station.callsign` and `station.locator`) |
 | `wsprnet.org` (HTTP) | uploading WSPR spots | `report.wsprnet` (off; the same) |
-| `time1-4.google.com` (NTP) | the clock (systemd's default time servers) | always |
+| `time1-4.google.com` (NTP) | the clock (chrony; the time-code stations web888d receives also feed it) | always |
 | your tunnel's server, or Cloudflare | the receiver from the Internet | a tunnel in `web888.txt` (none) |
 | your gpsd | the locator from GPS | `station.gpsd` (none) |
 

@@ -20,6 +20,8 @@ IMAGE_INSTALL += "frp cloudflared rathole chisel"
 # web888-boot-ok marks a slot good, after web888d has run, instead of
 # RAUC's own mark-good at boot.
 IMAGE_INSTALL += "rauc e2fsprogs-resize2fs"
+# The clock: chrony (NTP, and the time-code stations web888d receives)
+IMAGE_INSTALL += "chrony chronyc"
 BAD_RECOMMENDATIONS += "rauc-mark-good"
 
 IMAGE_LINGUAS = ""
